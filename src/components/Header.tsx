@@ -17,7 +17,7 @@ export function Header({ onMenuClick, currentView }: HeaderProps) {
       files: 'File Manager',
       settings: 'Settings'
     };
-    return titles[view as keyof typeof titles] || 'TorrentBay';
+    return titles[view as keyof typeof titles] || 'StreamSail';
   };
 
   return (
@@ -36,7 +36,7 @@ export function Header({ onMenuClick, currentView }: HeaderProps) {
               <div className="w-4 h-4 bg-white rounded transform rotate-45"></div>
             </div>
             <div>
-              <h1 className="text-xl font-bold text-gray-900 dark:text-white">TorrentBay</h1>
+              <h1 className="text-xl font-bold text-gray-900 dark:text-white">StreamSail</h1>
               <p className="text-xs text-gray-500 dark:text-gray-400">{getViewTitle(currentView)}</p>
             </div>
           </div>
