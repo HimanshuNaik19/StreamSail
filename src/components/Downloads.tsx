@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Play, Pause, Trash2, MoreHorizontal, Filter } from 'lucide-react';
+import { Play, Pause, Trash2, MoreHorizontal, Filter, Download } from 'lucide-react';
 import clsx from 'clsx';
 
 export function Downloads() {
@@ -158,7 +158,6 @@ export function Downloads() {
             </table>
           </div>
         )}
-        </div>
       </div>
     </div>
   );
