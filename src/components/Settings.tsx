@@ -76,50 +76,21 @@ export function Settings() {
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Download Path
               </label>
-              <input
-                type="text"
-                value={settings.downloadPath}
-                onChange={(e) => setSettings({...settings, downloadPath: e.target.value})}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-              />
+              <div className="flex space-x-2">
+                <input
+                  type="text"
+                  value={settings.downloadPath}
+                  onChange={(e) => setSettings({...settings, downloadPath: e.target.value})}
+                  className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                />
+                <button className="px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-600 dark:hover:bg-gray-500 text-gray-700 dark:text-gray-300 rounded-lg transition-colors">
+                  Browse
+                </button>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Upload Settings */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700">
-          <div className="flex items-center space-x-3 mb-6">
-            <Upload className="w-5 h-5 text-green-500" />
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Upload Settings</h3>
-          </div>
-          
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Max Upload Speed (KB/s)
-              </label>
-              <input
-                type="number"
-                value={settings.maxUploadSpeed}
-                onChange={(e) => setSettings({...settings, maxUploadSpeed: e.target.value})}
-                placeholder="0 = Unlimited"
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-              />
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Max Active Uploads
-              </label>
-              <input
-                type="number"
-                value={settings.maxActiveUploads}
-                onChange={(e) => setSettings({...settings, maxActiveUploads: e.target.value})}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-              />
-            </div>
-          </div>
-        </div>
 
         {/* Connection Settings */}
         <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700">

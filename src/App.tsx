@@ -3,13 +3,11 @@ import { Header } from './components/Header';
 import { Sidebar } from './components/Sidebar';
 import { Dashboard } from './components/Dashboard';
 import { Downloads } from './components/Downloads';
-import { Uploads } from './components/Uploads';
-import { Search } from './components/Search';
 import { Files } from './components/Files';
 import { Settings } from './components/Settings';
 import { ThemeProvider } from './contexts/ThemeContext';
 
-type ViewType = 'dashboard' | 'downloads' | 'uploads' | 'search' | 'files' | 'settings';
+type ViewType = 'dashboard' | 'downloads' | 'files' | 'settings';
 
 function App() {
   const [currentView, setCurrentView] = useState<ViewType>('dashboard');
@@ -21,10 +19,6 @@ function App() {
         return <Dashboard />;
       case 'downloads':
         return <Downloads />;
-      case 'uploads':
-        return <Uploads />;
-      case 'search':
-        return <Search />;
       case 'files':
         return <Files />;
       case 'settings':

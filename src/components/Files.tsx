@@ -20,53 +20,7 @@ export function Files() {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('list');
   const [searchTerm, setSearchTerm] = useState('');
 
-  const files = [
-    {
-      id: 1,
-      name: 'Ubuntu ISOs',
-      type: 'folder',
-      size: '15.2 GB',
-      items: 5,
-      modified: '2024-01-20',
-      path: '/downloads/ubuntu'
-    },
-    {
-      id: 2,
-      name: 'ubuntu-22.04.3-desktop-amd64.iso',
-      type: 'file',
-      size: '4.7 GB',
-      extension: 'iso',
-      modified: '2024-01-20',
-      path: '/downloads/ubuntu/ubuntu-22.04.3-desktop-amd64.iso'
-    },
-    {
-      id: 3,
-      name: 'Software Collection',
-      type: 'folder',
-      size: '8.9 GB',
-      items: 12,
-      modified: '2024-01-18',
-      path: '/downloads/software'
-    },
-    {
-      id: 4,
-      name: 'LibreOffice_7.6.2_Linux_x86-64_deb.tar.gz',
-      type: 'file',
-      size: '295 MB',
-      extension: 'tar.gz',
-      modified: '2024-01-15',
-      path: '/downloads/software/LibreOffice_7.6.2_Linux_x86-64_deb.tar.gz'
-    },
-    {
-      id: 5,
-      name: 'Documentation',
-      type: 'folder',
-      size: '156 MB',
-      items: 23,
-      modified: '2024-01-12',
-      path: '/downloads/docs'
-    }
-  ];
+  const files: any[] = [];
 
   const getFileIcon = (file: any) => {
     if (file.type === 'folder') {
@@ -164,83 +118,105 @@ export function Files() {
         </div>
 
         {viewMode === 'list' ? (
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-50 dark:bg-gray-700">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    Name
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    Size
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    Modified
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                {filteredFiles.map((file) => (
-                  <tr key={file.id} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                    <td className="px-6 py-4">
-                      <div className="flex items-center space-x-3">
-                        {getFileIcon(file)}
-                        <div>
-                          <div className="font-medium text-gray-900 dark:text-white">{file.name}</div>
-                          {file.type === 'folder' && (
-                            <div className="text-sm text-gray-500 dark:text-gray-400">{file.items} items</div>
-                          )}
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
-                      {file.size}
-                    </td>
-                    <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
-                      {file.modified}
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center space-x-2">
-                        <button className="p-1 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">
-                          <Download className="w-4 h-4" />
-                        </button>
-                        <button className="p-1 text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300">
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </td>
+          filteredFiles.length === 0 ? (
+            <div className="text-center py-12">
+              <FolderOpen className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">No Files Found</h3>
+              <p className="text-gray-600 dark:text-gray-400">Downloaded files will appear here once you start downloading torrents.</p>
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-gray-50 dark:bg-gray-700">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                      Name
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                      Size
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                      Modified
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                      Actions
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                  {filteredFiles.map((file) => (
+                    <tr key={file.id} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                      <td className="px-6 py-4">
+                        <div className="flex items-center space-x-3">
+                          {getFileIcon(file)}
+                          <div>
+                            <div className="font-medium text-gray-900 dark:text-white">{file.name}</div>
+                            {file.type === 'folder' && (
+                              <div className="text-sm text-gray-500 dark:text-gray-400">{file.items} items</div>
+                            )}
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
+                        {file.size}
+                      </td>
+                      <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
+                        {file.modified}
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex items-center space-x-2">
+                          <button 
+                            className="p-1 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+                            title="Open file location"
+                          >
+                            <ExternalLink className="w-4 h-4" />
+                          </button>
+                          <button className="p-1 text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300">
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )
         ) : (
-          <div className="p-6 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-            {filteredFiles.map((file) => (
-              <div key={file.id} className="group p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors cursor-pointer">
-                <div className="flex flex-col items-center text-center space-y-2">
-                  <div className="scale-150">
-                    {getFileIcon(file)}
-                  </div>
-                  <div className="w-full">
-                    <div className="font-medium text-gray-900 dark:text-white text-sm truncate">{file.name}</div>
-                    <div className="text-xs text-gray-500 dark:text-gray-400">{file.size}</div>
-                  </div>
-                  <div className="flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button className="p-1 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">
-                      <Download className="w-3 h-3" />
-                    </button>
-                    <button className="p-1 text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300">
-                      <Trash2 className="w-3 h-3" />
-                    </button>
+          filteredFiles.length === 0 ? (
+            <div className="text-center py-12">
+              <FolderOpen className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">No Files Found</h3>
+              <p className="text-gray-600 dark:text-gray-400">Downloaded files will appear here once you start downloading torrents.</p>
+            </div>
+          ) : (
+            <div className="p-6 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+              {filteredFiles.map((file) => (
+                <div key={file.id} className="group p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors cursor-pointer">
+                  <div className="flex flex-col items-center text-center space-y-2">
+                    <div className="scale-150">
+                      {getFileIcon(file)}
+                    </div>
+                    <div className="w-full">
+                      <div className="font-medium text-gray-900 dark:text-white text-sm truncate">{file.name}</div>
+                      <div className="text-xs text-gray-500 dark:text-gray-400">{file.size}</div>
+                    </div>
+                    <div className="flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <button 
+                        className="p-1 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+                        title="Open file location"
+                      >
+                        <ExternalLink className="w-3 h-3" />
+                      </button>
+                      <button className="p-1 text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300">
+                        <Trash2 className="w-3 h-3" />
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )
         )}
       </div>
     </div>

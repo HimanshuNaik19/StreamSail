@@ -21,17 +21,15 @@ interface SidebarProps {
 export function Sidebar({ isOpen, currentView, onViewChange }: SidebarProps) {
   const navItems = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { id: 'search', label: 'Search', icon: Search },
     { id: 'downloads', label: 'Downloads', icon: Download },
-    { id: 'uploads', label: 'Uploads', icon: Upload },
     { id: 'files', label: 'Files', icon: FolderOpen },
     { id: 'settings', label: 'Settings', icon: Settings },
   ];
 
   const stats = [
-    { label: 'Active', value: '12', icon: TrendingUp, color: 'text-green-500' },
-    { label: 'Queued', value: '3', icon: Clock, color: 'text-yellow-500' },
-    { label: 'Complete', value: '247', icon: CheckCircle, color: 'text-blue-500' },
+    { label: 'Active', value: '0', icon: TrendingUp, color: 'text-green-500' },
+    { label: 'Queued', value: '0', icon: Clock, color: 'text-yellow-500' },
+    { label: 'Complete', value: '0', icon: CheckCircle, color: 'text-blue-500' },
   ];
 
   return (
@@ -84,11 +82,11 @@ export function Sidebar({ isOpen, currentView, onViewChange }: SidebarProps) {
           <div className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg p-4 text-white">
             <h4 className="font-semibold mb-2">Storage Usage</h4>
             <div className="flex items-center justify-between text-sm mb-2">
-              <span>1.2 TB used</span>
+              <span>0 GB used</span>
               <span>2.0 TB total</span>
             </div>
             <div className="w-full bg-white/20 rounded-full h-2">
-              <div className="bg-white rounded-full h-2 w-3/5"></div>
+              <div className="bg-white rounded-full h-2 w-0"></div>
             </div>
           </div>
         </div>
