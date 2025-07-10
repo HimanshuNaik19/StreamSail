@@ -2,12 +2,12 @@ import React from 'react';
 import { Download, Upload, HardDrive, Activity, TrendingUp, TrendingDown } from 'lucide-react';
 import { StatCard } from './ui/StatCard';
 import { useApi } from '../hooks/useApi';
-import { mockApiService } from '../services/mockData';
+import { apiService } from '../services/api';
 import type { StatCardProps } from './ui/StatCard';
 
 export function Dashboard() {
-  const { data: dashboardStats, loading, error } = useApi(() => mockApiService.getDashboardStats());
-  const { data: torrents } = useApi(() => mockApiService.getTorrents());
+  const { data: dashboardStats, loading, error } = useApi(() => apiService.getDashboardStats());
+  const { data: torrents } = useApi(() => apiService.getTorrents());
 
   if (loading) {
     return (

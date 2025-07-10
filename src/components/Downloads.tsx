@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Play, Pause, Trash2, MoreHorizontal, Filter, Download } from 'lucide-react';
 import { useApi, useApiMutation } from '../hooks/useApi';
-import { mockApiService } from '../services/mockData';
+import { apiService } from '../services/api';
 import type { Torrent } from '../types';
 import clsx from 'clsx';
 
@@ -10,21 +10,21 @@ export function Downloads() {
   const [showAddTorrent, setShowAddTorrent] = useState(false);
   const [magnetLink, setMagnetLink] = useState('');
   
-  const { data: torrents, loading, error, refetch } = useApi(() => mockApiService.getTorrents());
+  const { data: torrents, loading, error, refetch } = useApi(() => apiService.getTorrents());
   const pauseMutation = useApiMutation<void, string>();
   const resumeMutation = useApiMutation<void, string>();
   const deleteMutation = useApiMutation<void, { id: string; deleteFiles: boolean }>();
   const addMutation = useApiMutation<Torrent, string>();
 
   const handlePauseTorrent = async (id: string) => {
-    const result = await pauseMutation.mutate(mockApiService.pauseTorrent, id);
+    const result = await pauseMutation.mutate(apiService.pauseTorrent, id);
     if (result.success) {
       refetch();
     }
   };
 
   const handleResumeTorrent = async (id: string) => {
-    const result = await resumeMutation.mutate(mockApiService.resumeTorrent, id);
+    const result = await resumeMutation.mutate(apiService.resumeTorrent, id);
     if (result.success) {
       refetch();
     }
@@ -32,7 +32,7 @@ export function Downloads() {
 
   const handleDeleteTorrent = async (id: string, deleteFiles: boolean = false) => {
     if (confirm('Are you sure you want to delete this torrent?')) {
-      const result = await deleteMutation.mutate(mockApiService.deleteTorrent, { id, deleteFiles });
+      const result = await deleteMutation.mutate(apiService.deleteTorrent, { id, deleteFiles });
       if (result.success) {
         refetch();
       }
@@ -43,7 +43,7 @@ export function Downloads() {
     e.preventDefault();
     if (!magnetLink.trim()) return;
 
-    const result = await addMutation.mutate(mockApiService.addTorrent, magnetLink);
+    const result = await addMutation.mutate(apiService.addTorrent, magnetLink);
     if (result.success) {
       setMagnetLink('');
       setShowAddTorrent(false);

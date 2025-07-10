@@ -11,7 +11,7 @@ import {
 import clsx from 'clsx';
 
 import { useApi } from '../hooks/useApi';
-import { mockApiService } from '../services/mockData';
+import { apiService } from '../services/api';
 import type { ViewType } from '../App';
 
 interface SidebarProps {
@@ -28,7 +28,7 @@ export function Sidebar({ isOpen, currentView, onViewChange }: SidebarProps) {
     { id: 'settings', label: 'Settings', icon: Settings },
   ];
 
-  const { data: dashboardStats } = useApi(() => mockApiService.getDashboardStats());
+  const { data: dashboardStats } = useApi(() => apiService.getDashboardStats());
   
   const stats = [
     { 

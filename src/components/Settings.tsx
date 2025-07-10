@@ -6,11 +6,11 @@ import {
   Save
 } from 'lucide-react';
 import { useApi, useApiMutation } from '../hooks/useApi';
-import { mockApiService } from '../services/mockData';
+import { apiService } from '../services/api';
 import type { AppSettings } from '../types';
 
 export function Settings() {
-  const { data: initialSettings, loading, error } = useApi(() => mockApiService.getSettings());
+  const { data: initialSettings, loading, error } = useApi(() => apiService.getSettings());
   const updateMutation = useApiMutation<AppSettings, Partial<AppSettings>>();
   
   const [settings, setSettings] = useState<AppSettings | null>(null);
@@ -33,7 +33,7 @@ export function Settings() {
   const handleSave = async () => {
     if (!settings) return;
     
-    const result = await updateMutation.mutate(mockApiService.updateSettings, settings);
+    const result = await updateMutation.mutate(apiService.updateSettings, settings);
     if (result.success) {
       setHasChanges(false);
     }

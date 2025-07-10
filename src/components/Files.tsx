@@ -15,7 +15,7 @@ import {
   ExternalLink
 } from 'lucide-react';
 import { useApi, useApiMutation } from '../hooks/useApi';
-import { mockApiService } from '../services/mockData';
+import { apiService } from '../services/api';
 import type { TorrentFile } from '../types';
 import clsx from 'clsx';
 
@@ -23,17 +23,17 @@ export function Files() {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('list');
   const [searchTerm, setSearchTerm] = useState('');
 
-  const { data: files, loading, error, refetch } = useApi(() => mockApiService.getAllFiles());
+  const { data: files, loading, error, refetch } = useApi(() => apiService.getAllFiles());
   const openLocationMutation = useApiMutation<void, string>();
   const deleteFileMutation = useApiMutation<void, string>();
 
   const handleOpenLocation = async (filePath: string) => {
-    await openLocationMutation.mutate(mockApiService.openFileLocation, filePath);
+    await openLocationMutation.mutate(apiService.openFileLocation, filePath);
   };
 
   const handleDeleteFile = async (filePath: string) => {
     if (confirm('Are you sure you want to delete this file?')) {
-      const result = await deleteFileMutation.mutate(mockApiService.deleteFile, filePath);
+      const result = await deleteFileMutation.mutate(apiService.deleteFile, filePath);
       if (result.success) {
         refetch();
       }
