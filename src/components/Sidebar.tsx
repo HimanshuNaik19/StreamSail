@@ -10,6 +10,8 @@ import {
 } from 'lucide-react';
 import clsx from 'clsx';
 
+import { useApi } from '../hooks/useApi';
+import { mockApiService } from '../services/mockData';
 import type { ViewType } from '../App';
 
 interface SidebarProps {
@@ -26,11 +28,32 @@ export function Sidebar({ isOpen, currentView, onViewChange }: SidebarProps) {
     { id: 'settings', label: 'Settings', icon: Settings },
   ];
 
+  const { data: dashboardStats } = useApi(() => mockApiService.getDashboardStats());
+  
   const stats = [
-    { label: 'Active', value: '0', icon: TrendingUp, color: 'text-green-500' },
-    { label: 'Queued', value: '0', icon: Clock, color: 'text-yellow-500' },
-    { label: 'Complete', value: '0', icon: CheckCircle, color: 'text-blue-500' },
+    { 
+      label: 'Active', 
+      value: dashboardStats?.activeTorrents.toString() || '0', 
+      icon: TrendingUp, 
+      color: 'text-green-500' 
+    },
+    { 
+      label: 'Queued', 
+      value: dashboardStats?.queuedTorrents.toString() || '0', 
+      icon: Clock, 
+      color: 'text-yellow-500' 
+    },
+    { 
+      label: 'Complete', 
+      value: dashboardStats?.completedTorrents.toString() || '0', 
+      icon: CheckCircle, 
+      color: 'text-blue-500' 
+    },
   ];
+
+  const storagePercentage = dashboardStats 
+    ? Math.round((dashboardStats.storageUsedBytes / dashboardStats.storageTotalBytes) * 100)
+    : 0;
 
   return (
     <aside className={clsx(
@@ -82,12 +105,16 @@ export function Sidebar({ isOpen, currentView, onViewChange }: SidebarProps) {
           <div className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg p-4 text-white">
             <h4 className="font-semibold mb-2">Storage Usage</h4>
             <div className="flex items-center justify-between text-sm mb-2">
-              <span>0 GB used</span>
-              <span>2.0 TB total</span>
+              <span>{dashboardStats?.storageUsed || '0 B'} used</span>
+              <span>{dashboardStats?.storageTotal || '0 B'} total</span>
             </div>
             <div className="w-full bg-white/20 rounded-full h-2">
-              <div className="bg-white rounded-full h-2 w-0"></div>
+              <div 
+                className="bg-white rounded-full h-2 transition-all duration-300" 
+                style={{ width: `${Math.min(storagePercentage, 100)}%` }}
+              ></div>
             </div>
+            <div className="text-xs mt-1 opacity-90">{storagePercentage}% used</div>
           </div>
         </div>
       </div>

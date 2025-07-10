@@ -14,15 +14,33 @@ import {
   Video,
   ExternalLink
 } from 'lucide-react';
+import { useApi, useApiMutation } from '../hooks/useApi';
+import { mockApiService } from '../services/mockData';
+import type { TorrentFile } from '../types';
 import clsx from 'clsx';
 
 export function Files() {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('list');
   const [searchTerm, setSearchTerm] = useState('');
 
-  const files: any[] = [];
+  const { data: files, loading, error, refetch } = useApi(() => mockApiService.getAllFiles());
+  const openLocationMutation = useApiMutation<void, string>();
+  const deleteFileMutation = useApiMutation<void, string>();
 
-  const getFileIcon = (file: any) => {
+  const handleOpenLocation = async (filePath: string) => {
+    await openLocationMutation.mutate(mockApiService.openFileLocation, filePath);
+  };
+
+  const handleDeleteFile = async (filePath: string) => {
+    if (confirm('Are you sure you want to delete this file?')) {
+      const result = await deleteFileMutation.mutate(mockApiService.deleteFile, filePath);
+      if (result.success) {
+        refetch();
+      }
+    }
+  };
+
+  const getFileIcon = (file: TorrentFile) => {
     if (file.type === 'folder') {
       return <Folder className="w-5 h-5 text-blue-500" />;
     }
@@ -43,15 +61,55 @@ export function Files() {
         return <Music className="w-5 h-5 text-yellow-500" />;
       case 'mp4':
       case 'avi':
+      case 'mkv':
         return <Video className="w-5 h-5 text-purple-500" />;
       default:
         return <File className="w-5 h-5 text-gray-500" />;
     }
   };
 
-  const filteredFiles = files.filter(file =>
+  const filteredFiles = (files || []).filter(file =>
     file.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  if (loading) {
+    return (
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">File Manager</h1>
+          <p className="text-gray-600 dark:text-gray-400">Loading your files...</p>
+        </div>
+        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+          <div className="animate-pulse space-y-4">
+            {[...Array(5)].map((_, i) => (
+              <div key={i} className="flex items-center space-x-3">
+                <div className="w-5 h-5 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                <div className="flex-1 h-4 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                <div className="w-16 h-4 bg-gray-200 dark:bg-gray-700 rounded"></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">File Manager</h1>
+          <p className="text-red-600 dark:text-red-400">Error loading files: {error}</p>
+        </div>
+        <button 
+          onClick={refetch}
+          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors"
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -113,7 +171,7 @@ export function Files() {
         <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
             <FolderOpen className="w-4 h-4" />
-            <span>/downloads</span>
+            <span>/home/user/Downloads</span>
           </div>
         </div>
 
@@ -121,8 +179,15 @@ export function Files() {
           filteredFiles.length === 0 ? (
             <div className="text-center py-12">
               <FolderOpen className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">No Files Found</h3>
-              <p className="text-gray-600 dark:text-gray-400">Downloaded files will appear here once you start downloading torrents.</p>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                {searchTerm ? 'No Files Found' : 'No Files'}
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400">
+                {searchTerm 
+                  ? `No files match "${searchTerm}"`
+                  : 'Downloaded files will appear here once you start downloading torrents.'
+                }
+              </p>
             </div>
           ) : (
             <div className="overflow-x-auto">
@@ -154,6 +219,9 @@ export function Files() {
                             {file.type === 'folder' && (
                               <div className="text-sm text-gray-500 dark:text-gray-400">{file.items} items</div>
                             )}
+                            {file.progress < 100 && (
+                              <div className="text-sm text-blue-600 dark:text-blue-400">{file.progress}% complete</div>
+                            )}
                           </div>
                         </div>
                       </td>
@@ -161,17 +229,24 @@ export function Files() {
                         {file.size}
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
-                        {file.modified}
+                        {new Date(file.modified).toLocaleDateString()}
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center space-x-2">
                           <button 
+                            onClick={() => handleOpenLocation(file.path)}
+                            disabled={openLocationMutation.loading}
                             className="p-1 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
                             title="Open file location"
                           >
                             <ExternalLink className="w-4 h-4" />
                           </button>
-                          <button className="p-1 text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300">
+                          <button 
+                            onClick={() => handleDeleteFile(file.path)}
+                            disabled={deleteFileMutation.loading}
+                            className="p-1 text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"
+                            title="Delete file"
+                          >
                             <Trash2 className="w-4 h-4" />
                           </button>
                         </div>
@@ -186,8 +261,15 @@ export function Files() {
           filteredFiles.length === 0 ? (
             <div className="text-center py-12">
               <FolderOpen className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">No Files Found</h3>
-              <p className="text-gray-600 dark:text-gray-400">Downloaded files will appear here once you start downloading torrents.</p>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                {searchTerm ? 'No Files Found' : 'No Files'}
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400">
+                {searchTerm 
+                  ? `No files match "${searchTerm}"`
+                  : 'Downloaded files will appear here once you start downloading torrents.'
+                }
+              </p>
             </div>
           ) : (
             <div className="p-6 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
@@ -200,15 +282,25 @@ export function Files() {
                     <div className="w-full">
                       <div className="font-medium text-gray-900 dark:text-white text-sm truncate">{file.name}</div>
                       <div className="text-xs text-gray-500 dark:text-gray-400">{file.size}</div>
+                      {file.progress < 100 && (
+                        <div className="text-xs text-blue-600 dark:text-blue-400">{file.progress}%</div>
+                      )}
                     </div>
                     <div className="flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
                       <button 
+                        onClick={() => handleOpenLocation(file.path)}
+                        disabled={openLocationMutation.loading}
                         className="p-1 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
                         title="Open file location"
                       >
                         <ExternalLink className="w-3 h-3" />
                       </button>
-                      <button className="p-1 text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300">
+                      <button 
+                        onClick={() => handleDeleteFile(file.path)}
+                        disabled={deleteFileMutation.loading}
+                        className="p-1 text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"
+                        title="Delete file"
+                      >
                         <Trash2 className="w-3 h-3" />
                       </button>
                     </div>
