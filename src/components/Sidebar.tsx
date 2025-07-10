@@ -1,9 +1,7 @@
 import React from 'react';
 import { 
   LayoutDashboard, 
-  Download, 
-  Upload, 
-  Search, 
+  Download,  
   FolderOpen, 
   Settings,
   TrendingUp,
@@ -12,10 +10,12 @@ import {
 } from 'lucide-react';
 import clsx from 'clsx';
 
+import type { ViewType } from '../App';
+
 interface SidebarProps {
   isOpen: boolean;
-  currentView: string;
-  onViewChange: (view: string) => void;
+  currentView: ViewType;
+  onViewChange: (view: ViewType) => void;
 }
 
 export function Sidebar({ isOpen, currentView, onViewChange }: SidebarProps) {
@@ -45,7 +45,7 @@ export function Sidebar({ isOpen, currentView, onViewChange }: SidebarProps) {
             return (
               <button
                 key={item.id}
-                onClick={() => onViewChange(item.id)}
+                onClick={() => onViewChange(item.id as ViewType)}
                 className={clsx(
                   'w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-left transition-colors',
                   currentView === item.id

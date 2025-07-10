@@ -2,12 +2,12 @@ import React from 'react';
 import { DivideIcon as LucideIcon, TrendingUp, TrendingDown } from 'lucide-react';
 import clsx from 'clsx';
 
-interface StatCardProps {
+export interface StatCardProps {
   title: string;
   value: string;
   change: string;
   trend: 'up' | 'down';
-  icon: LucideIcon;
+  icon: typeof LucideIcon;
   color: 'blue' | 'green' | 'purple' | 'orange';
 }
 

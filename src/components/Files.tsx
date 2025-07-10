@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { 
   Folder, 
   File, 
-  Download, 
   Trash2, 
   Search, 
   Filter,
@@ -12,7 +11,8 @@ import {
   FileText,
   Image,
   Music,
-  Video
+  Video,
+  ExternalLink
 } from 'lucide-react';
 import clsx from 'clsx';
 

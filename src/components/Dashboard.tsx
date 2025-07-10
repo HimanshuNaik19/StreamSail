@@ -1,11 +1,12 @@
 import React from 'react';
 import { Download, Upload, HardDrive, Activity, TrendingUp, TrendingDown } from 'lucide-react';
 import { StatCard } from './ui/StatCard';
-import { Chart } from './ui/Chart';
-import { RecentActivity } from './ui/RecentActivity';
+import type { StatCardProps } from './ui/StatCard';
+// import { Chart } from './ui/Chart';
+// import { RecentActivity } from './ui/RecentActivity';
 
 export function Dashboard() {
-  const stats = [
+  const stats: StatCardProps[] = [
     {
       title: 'Download Speed',
       value: '0 MB/s',

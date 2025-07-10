@@ -1,11 +1,7 @@
 import React, { useState } from 'react';
 import { 
-  Download, 
-  Upload, 
-  Shield, 
+  Download,
   Bell, 
-  Globe, 
-  HardDrive,
   Wifi,
   Save
 } from 'lucide-react';

@@ -7,7 +7,7 @@ import { Files } from './components/Files';
 import { Settings } from './components/Settings';
 import { ThemeProvider } from './contexts/ThemeContext';
 
-type ViewType = 'dashboard' | 'downloads' | 'files' | 'settings';
+export type ViewType = 'dashboard' | 'downloads' | 'files' | 'settings';
 
 function App() {
   const [currentView, setCurrentView] = useState<ViewType>('dashboard');
