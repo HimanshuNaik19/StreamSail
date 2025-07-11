@@ -1,6 +1,6 @@
 import type { Torrent, TorrentFile, DashboardStats, AppSettings, ApiResponse } from '../types';
 
-// Mock API base URL - replace with actual backend URL
+// Backend API URL
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api';
 
 class ApiService {
@@ -57,10 +57,10 @@ class ApiService {
     });
   }
 
-  async deleteTorrent(id: string, deleteFiles: boolean = false): Promise<ApiResponse<void>> {
-    return this.request<void>(`/torrents/${id}`, {
+  async deleteTorrent(params: { id: string; deleteFiles: boolean }): Promise<ApiResponse<void>> {
+    return this.request<void>(`/torrents/${params.id}`, {
       method: 'DELETE',
-      body: JSON.stringify({ deleteFiles }),
+      body: JSON.stringify({ deleteFiles: params.deleteFiles }),
     });
   }
 
